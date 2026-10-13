@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Products | PhoneZone{% endblock %}
+{% block content %}
+<section class="page-header">
+    <p class="eyebrow">Shop phones</p>
+    <h1>Find your next smartphone</h1>
+    <p>Click any phone image to open its details page. Stock is loaded from MySQL and updates after checkout.</p>
+</section>
+
+<section class="section filters-wrap">
+    <input id="searchInput" type="text" placeholder="Search iPhone, Samsung, Pixel..." onkeyup="filterProducts()">
+    <select id="sortSelect" onchange="sortProducts()">
+        <option value="default">Sort by</option>
+        <option value="low">Price: low to high</option>
+        <option value="high">Price: high to low</option>
+        <option value="rating">Highest rating</option>
+    </select>
+</section>
+
+<section class="section products-grid" id="productsGrid">
+    {% for product in products %}
+    <article class="product-card" data-product-id="{{ product.id }}" data-name="{{ product.name }} {{ product.brand }}" data-price="{{ product.price }}" data-rating="{{ product.rating }}" data-stock="{{ product.stock }}">
+        <span class="badge">{{ product.badge }}</span>
+        <a href="{{ url_for('details', product_id=product.id) }}">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+        </a>
+        <div class="stock-pill" id="stock-{{ product.id }}">{{ product.stock }} in stock</div>
+        <div class="rating">★ {{ product.rating }}</div>
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.tagline }}</p>
+        <div class="specs">
+            <span>{{ product.storage }}</span>
+            <span>{{ product.category }}</span>
+            <span>Fast charge</span>
+        </div>
+        <div class="card-bottom">
+            <div>
+                <span class="old-price">${{ '%.0f'|format(product.old_price) }}</span>
+                <span class="price">${{ '%.0f'|format(product.price) }}</span>
+            </div>
+            <button type="button" data-add-button="{{ product.id }}" onclick="addToCart('{{ product.id }}', '{{ product.name }}', {{ product.price }}, '{{ product.image }}')">Add to Cart</button>
+        </div>
+        <a class="details-link" href="{{ url_for('details', product_id=product.id) }}">View details →</a>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Checkout | PhoneZone{% endblock %}
+{% block content %}
+<section class="page-header small">
+    <p class="eyebrow">Secure checkout</p>
+    <h1>Complete your order</h1>
+</section>
+
+<section class="checkout-layout">
+    <form class="checkout-form" onsubmit="placeOrder(event)">
+        <h2>Shipping Information</h2>
+        <input id="name" type="text" placeholder="Full Name">
+        <input id="email" type="email" placeholder="Email Address">
+        <input id="address" type="text" placeholder="Shipping Address">
+        <div class="form-row">
+            <input id="city" type="text" placeholder="City">
+            <input id="postal" type="text" placeholder="Postal Code">
+        </div>
+
+        <h2>Payment Information</h2>
+        <input id="card" type="text" placeholder="Card Number">
+        <div class="form-row">
+            <input id="expiry" type="text" placeholder="MM/YY">
+            <input id="cvv" type="text" placeholder="CVV">
+        </div>
+        <button type="submit" class="wide-btn">Place Order</button>
+    </form>
+
+    <aside class="summary-card">
+        <h2>Your Items</h2>
+        <div id="checkoutSummary"></div>
+        <hr>
+        <div class="summary-line total"><span>Total</span><strong id="checkoutTotal">$0</strong></div>
+        <a class="btn secondary wide" href="{{ url_for('cart') }}">Back to Cart</a>
+    </aside>
+</section>
+{% endblock %}

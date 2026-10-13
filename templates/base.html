@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PhoneZone{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="logo" href="{{ url_for('home') }}"><span>Phone</span>Zone</a>
+        <div class="nav-links" id="navLinks">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Products</a>
+            <a href="{{ url_for('cart') }}">Cart <span class="cart-count" id="cartCount">0</span></a>
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+        </div>
+        <button class="menu-btn" type="button" onclick="toggleMenu()">☰</button>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-wrap">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer class="footer">
+        <div>
+            <h3>PhoneZone</h3>
+            <p>Premium phones, smooth checkout, and a modern shopping experience.</p>
+        </div>
+        <div>
+            <p>Free shipping over $900</p>
+            <p>Secure checkout</p>
+            <p>24/7 support</p>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

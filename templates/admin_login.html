@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Admin Login | PhoneZone{% endblock %}
+{% block content %}
+<section class="page-header small">
+    <p class="eyebrow">Admin access</p>
+    <h1>PhoneZone Admin Login</h1>
+    <p>Manage products, stock, pricing, and low-stock alerts.</p>
+</section>
+
+<section class="admin-auth-wrap">
+    <form class="checkout-form admin-auth-card" method="POST">
+        <h2>Login</h2>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="wide-btn">Login</button>
+        <p class="admin-hint">Use the administrator credentials configured in your environment.</p>
+    </form>
+</section>
+{% endblock %}

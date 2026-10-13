@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'add' %}Add Product{% else %}Edit Product{% endif %} | PhoneZone{% endblock %}
+{% block content %}
+<section class="page-header small">
+    <p class="eyebrow">Admin product form</p>
+    <h1>{% if mode == 'add' %}Add New Product{% else %}Edit Product{% endif %}</h1>
+    <p>Fill in the product information below. These changes write directly to MySQL.</p>
+</section>
+
+<section class="admin-form-section">
+    <form class="admin-form" method="POST">
+        <div class="form-row">
+            <label>Product Name
+                <input name="ProductName" type="text" value="{{ product.ProductName if product else '' }}" required>
+            </label>
+            <label>Brand
+                <input name="Brand" type="text" value="{{ product.Brand if product else '' }}" required>
+            </label>
+        </div>
+
+        <label>Description
+            <textarea name="Description" rows="5" required>{{ product.Description if product else '' }}</textarea>
+        </label>
+
+        <div class="form-row">
+            <label>Price
+                <input name="Price" type="number" step="0.01" min="0" value="{{ product.Price if product else '' }}" required>
+            </label>
+            <label>Stock
+                <input name="Stock" type="number" min="0" value="{{ product.Stock if product else '' }}" required>
+            </label>
+        </div>
+
+        <div class="form-row">
+            <label>Image File Name
+                <input name="Image" type="text" placeholder="ip15.png" value="{{ product.Image if product else '' }}" required>
+            </label>
+            <label>Rating
+                <input name="Rating" type="number" step="0.1" min="0" max="5" value="{{ product.Rating if product else '' }}" required>
+            </label>
+        </div>
+
+        <label>Category
+            <select name="CategoryID" required>
+                {% for category in categories %}
+                <option value="{{ category.CategoryID }}" {% if product and product.CategoryID == category.CategoryID %}selected{% endif %}>{{ category.CategoryName }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="wide-btn">{% if mode == 'add' %}Add Product{% else %}Save Changes{% endif %}</button>
+            <a class="btn secondary" href="{{ url_for('admin_dashboard') }}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

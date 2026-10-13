@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}PhoneZone | Premium Smartphones{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <p class="eyebrow">Live MySQL inventory</p>
+        <h1>Upgrade to a phone that feels premium every day.</h1>
+        <p>Shop flagship smartphones with real database stock, quick cart updates, and a checkout page that updates inventory after every order.</p>
+        <div class="hero-actions">
+            <a class="btn primary" href="{{ url_for('products') }}">Shop Phones</a>
+            <a class="btn secondary" href="#featured">View Deals</a>
+        </div>
+        <div class="stats">
+            <span><strong>{{ products|length }}</strong> flagship models</span>
+            <span><strong>Live</strong> stock tracking</span>
+            <span><strong>Secure</strong> checkout</span>
+        </div>
+    </div>
+    <div class="hero-card">
+        <img src="{{ url_for('static', filename='ip15.png') }}" alt="iPhone 15 Pro">
+        <div class="floating-card">Database-powered store</div>
+    </div>
+</section>
+
+<section class="section" id="featured">
+    <div class="section-heading">
+        <p class="eyebrow">Featured products</p>
+        <h2>Popular right now</h2>
+    </div>
+    <div class="products-grid compact">
+        {% for product in products %}
+        <article class="product-card" data-product-id="{{ product.id }}" data-name="{{ product.name }} {{ product.brand }}" data-price="{{ product.price }}" data-rating="{{ product.rating }}" data-stock="{{ product.stock }}">
+            <span class="badge">{{ product.badge }}</span>
+            <a href="{{ url_for('details', product_id=product.id) }}">
+                <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+            </a>
+            <div class="stock-pill" id="stock-{{ product.id }}">{{ product.stock }} in stock</div>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.tagline }}</p>
+            <div class="card-bottom">
+                <span class="price">${{ '%.0f'|format(product.price) }}</span>
+                <button type="button" data-add-button="{{ product.id }}" onclick="addToCart('{{ product.id }}', '{{ product.name }}', {{ product.price }}, '{{ product.image }}')">Add</button>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

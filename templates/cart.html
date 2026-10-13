@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Cart | PhoneZone{% endblock %}
+{% block content %}
+<section class="page-header small">
+    <p class="eyebrow">Your cart</p>
+    <h1>Review your order</h1>
+</section>
+
+<section class="cart-layout">
+    <div class="cart-items" id="cartItems"></div>
+    <aside class="summary-card">
+        <h2>Order Summary</h2>
+        <div class="summary-line"><span>Subtotal</span><strong id="subtotal">$0</strong></div>
+        <div class="summary-line"><span>Shipping</span><strong id="shipping">$0</strong></div>
+        <div class="summary-line"><span>Tax</span><strong id="tax">$0</strong></div>
+        <hr>
+        <div class="summary-line total"><span>Total</span><strong id="total">$0</strong></div>
+        <a class="btn primary wide" href="{{ url_for('checkout') }}">Proceed to Checkout</a>
+        <button type="button" class="ghost wide" onclick="clearCart()">Clear Cart</button>
+    </aside>
+</section>
+{% endblock %}

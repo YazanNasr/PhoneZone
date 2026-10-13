@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | PhoneZone{% endblock %}
+{% block content %}
+<section class="details-layout" data-product-id="{{ product.id }}" data-stock="{{ product.stock }}">
+    <div class="details-image">
+        <span class="badge">{{ product.badge }}</span>
+        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+    </div>
+    <div class="details-info">
+        <p class="eyebrow">{{ product.brand }}</p>
+        <h1>{{ product.name }}</h1>
+        <p class="lead">{{ product.description }}</p>
+        <div class="rating large">★ {{ product.rating }} customer rating</div>
+        <div class="price-row">
+            <span class="old-price">${{ '%.0f'|format(product.old_price) }}</span>
+            <span class="price big">${{ '%.0f'|format(product.price) }}</span>
+        </div>
+
+        <div class="stock-panel">
+            <strong id="stock-{{ product.id }}">{{ product.stock }} in stock</strong>
+            <span>This stock number comes from MySQL and decreases after checkout.</span>
+        </div>
+
+        <div class="option-box">
+            <h3>Available colors</h3>
+            <div class="pills">
+                {% for color in product.colors %}<span>{{ color }}</span>{% endfor %}
+            </div>
+        </div>
+
+        <div class="option-box">
+            <h3>Key features</h3>
+            <ul class="feature-list">
+                {% for feature in product.features %}<li>{{ feature }}</li>{% endfor %}
+            </ul>
+        </div>
+
+        <button type="button" class="wide-btn" data-add-button="{{ product.id }}" onclick="addToCart('{{ product.id }}', '{{ product.name }}', {{ product.price }}, '{{ product.image }}')">Add to Cart</button>
+        <a class="btn secondary" href="{{ url_for('products') }}">Back to Products</a>
+    </div>
+</section>
+{% endblock %}

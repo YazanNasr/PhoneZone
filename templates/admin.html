@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | PhoneZone{% endblock %}
+{% block content %}
+<section class="page-header small">
+    <p class="eyebrow">Inventory control</p>
+    <h1>Admin Dashboard</h1>
+    <p>Manage products directly from the website. Changes update your MySQL database.</p>
+    <div class="hero-actions admin-actions">
+        <a class="btn primary" href="{{ url_for('admin_add_product') }}">Add New Product</a>
+        <a class="btn secondary" href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+</section>
+
+<section class="admin-section">
+    <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+            <span>Total Products</span>
+            <strong>{{ stats.total_products }}</strong>
+        </div>
+        <div class="admin-stat-card">
+            <span>Total Units</span>
+            <strong>{{ stats.total_stock }}</strong>
+        </div>
+        <div class="admin-stat-card">
+            <span>Inventory Value</span>
+            <strong>${{ '%.0f'|format(stats.inventory_value) }}</strong>
+        </div>
+        <div class="admin-stat-card warning">
+            <span>Low Stock Items</span>
+            <strong>{{ stats.low_stock_count }}</strong>
+        </div>
+    </div>
+</section>
+
+{% if low_stock %}
+<section class="admin-section compact-top">
+    <div class="admin-panel danger-panel">
+        <h2>Low Stock Alerts</h2>
+        <div class="low-stock-list">
+            {% for item in low_stock %}
+            <div class="low-stock-row">
+                <strong>{{ item.ProductName }}</strong>
+                <span>{{ item.Stock }} left</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="admin-section compact-top">
+    <div class="admin-panel">
+        <div class="admin-panel-header">
+            <div>
+                <p class="eyebrow">Product database</p>
+                <h2>Manage Products</h2>
+            </div>
+            <a class="btn primary" href="{{ url_for('admin_add_product') }}">Add Product</a>
+        </div>
+
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Quick Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>#{{ product.id }}</td>
+                        <td>
+                            <div class="admin-product-cell">
+                                <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+                                <div>
+                                    <strong>{{ product.name }}</strong>
+                                    <span>{{ product.brand }} · {{ product.category }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${{ '%.0f'|format(product.price) }}</td>
+                        <td>
+                            <span class="admin-stock {% if product.stock == 0 %}out{% elif product.stock <= 3 %}low{% endif %}">
+                                {{ product.stock }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="stock-actions">
+                                <form method="POST" action="{{ url_for('admin_restock_product', product_id=product.id, amount=1) }}"><button type="submit">+1</button></form>
+                                <form method="POST" action="{{ url_for('admin_restock_product', product_id=product.id, amount=5) }}"><button type="submit">+5</button></form>
+                                <form method="POST" action="{{ url_for('admin_restock_product', product_id=product.id, amount=-1) }}"><button type="submit">-1</button></form>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="admin-row-actions">
+                                <a class="btn secondary small-btn" href="{{ url_for('admin_edit_product', product_id=product.id) }}">Edit</a>
+                                <form method="POST" action="{{ url_for('admin_delete_product', product_id=product.id) }}" onsubmit="return confirm('Delete {{ product.name }} from the database?')">
+                                    <button type="submit" class="delete-btn small-btn">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
